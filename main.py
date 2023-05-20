@@ -1,7 +1,6 @@
 from steamship import Steamship
 import streamlit as st
 
-
 st.set_page_config(
     page_title="Ericsson motivator",
     page_icon="🧊",
@@ -12,7 +11,6 @@ st.set_page_config(
         "About": "Made by https://github.com/matousidc!"
     },
 )
-st.title("Your personal Ericsson motivator to get you through loads")
 
 
 def generate():
@@ -22,9 +20,6 @@ def generate():
     # Invoke the method
     resp = pkg.invoke("generate", name=name, trait=trait)
     print(resp)
-
-
-
 
 
 def generate_motivation(prompt: str):
@@ -44,5 +39,5 @@ st.markdown("### What is bothering you today?")
 text = st.text_input("# What is bothering you today?", label_visibility="collapsed")
 st.markdown("### Response")
 if text:
-    with st.spinner("LLM is thinking..."):
+    with st.spinner("The AI is thinking..."):
         generate_motivation(text)
