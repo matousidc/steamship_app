@@ -1,12 +1,11 @@
 {
 	"type": "package",
-	"handle": "initial-tst",
+	"handle": "ericsson_motivator",
 	"version": "0.0.3",
 	"description": "",
 	"author": "matousidc",
-	"entrypoint": "Unused",
+	"entrypoint": "api.handler",
 	"public": false,
-	"plugin": null,
 	"build_config": {
 		"ignore": [
 			"tests",

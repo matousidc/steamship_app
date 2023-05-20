@@ -17,9 +17,11 @@ To deploy and get a public API and web demo:
 To learn more about advanced uses of Steamship, read our docs at: https://docs.steamship.com/packages/using.html.
 """
 import inspect
+
+from steamship.data.operations.generator import GenerateResponse
 from termcolor import colored
 
-from steamship import check_environment, RuntimeEnvironments, Steamship
+from steamship import check_environment, RuntimeEnvironments, Steamship, Task
 from steamship.invocable import post, PackageService
 
 
@@ -32,7 +34,7 @@ class PromptPackage(PackageService):
     # `/generate` request path.
     # See README.md for more information about deployment.
     @post("generate")
-    def generate(self, name: str, trait: str) -> str:
+    def generate(self, name: str, trait: str) -> Task[GenerateResponse]:
         """Generate text from prompt parameters."""
         llm_config = {
             # Controls length of generated output.
@@ -46,16 +48,16 @@ class PromptPackage(PackageService):
         return llm.generate(self.PROMPT, prompt_args)
 
     @post("generate_ericsson")
-    def generate_ericsson(self, _prompt: str) -> str:
+    def generate_ericsson(self, _prompt: str) -> Task[GenerateResponse]:
         """Generate text from prompt parameters."""
         llm_config = {
             # Controls length of generated output.
             "max_words": 100,
             # Controls randomness of output (range: 0.0-1.0).
-            "temperature": 0.8,
+            "temperature": 0.9,
         }
-
-        prompt = "```{_prompt}```. You are a wise old man and your job is to motivate user about their complaint delimeted by ```."
+        prompt = "Complaint: '{_prompt}'. You are a wise old man and your job is to motivate user about their" \
+                 " complaint, writen in quotes, according their work that  is called 'Ericsson load'."
         prompt_args = {"_prompt": _prompt}
         llm = self.client.use_plugin("gpt-3", config=llm_config)
         return llm.generate(prompt, prompt_args)
