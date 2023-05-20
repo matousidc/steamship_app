@@ -16,7 +16,6 @@ To deploy and get a public API and web demo:
 
 To learn more about advanced uses of Steamship, read our docs at: https://docs.steamship.com/packages/using.html.
 """
-import inspect
 
 from steamship.data.operations.generator import GenerateResponse
 from termcolor import colored
@@ -26,6 +25,8 @@ from steamship.invocable import post, PackageService
 
 
 class PromptPackage(PackageService):
+    """Defining api endpoints"""
+
     # Modify this to customize behavior to match your needs.
     PROMPT = "Say an unusual greeting to {name}. Compliment them on their {trait}."
 
@@ -58,47 +59,7 @@ class PromptPackage(PackageService):
         }
         prompt = "Complaint: '{_prompt}'. You are a wise old man and your job is to motivate user about their" \
                  " complaint, writen in quotes, according their work that  is called 'Ericsson load'."
+
         prompt_args = {"_prompt": _prompt}
         llm = self.client.use_plugin("gpt-3", config=llm_config)
         return llm.generate(prompt, prompt_args)
-
-
-# Try it out locally by running this file!
-if __name__ == "__main__":
-    print(colored("Generate Compliments with GPT-3\n", attrs=["bold"]))
-
-    # This helper provides runtime API key prompting, etc.
-    check_environment(RuntimeEnvironments.REPLIT)
-
-    with Steamship.temporary_workspace() as client:
-        prompt = PromptPackage(client)
-
-        example_name = "Han Solo"
-        example_trait = "heroism in the face of adversity"
-        print(colored("First, let's run through an example...", "green"))
-        print(colored("Name:", "green"), f"{example_name}")
-        print(colored("Trait:", "green"), f"{example_trait}")
-        print(colored("Generating...", "green"))
-        print(colored("Compliment:", "green"), f"{prompt.generate(name=example_name, trait=example_trait)}\n")
-
-        print(colored("Now, try with your own inputs...", "green"))
-
-        try_again = True
-        while try_again:
-            kwargs = {}
-            for parameter in inspect.signature(prompt.generate).parameters:
-                kwargs[parameter] = input(colored(f"{parameter.capitalize()}: ", "green"))
-
-            print(colored("Generating...", "green"))
-
-            # This is the prompt-based generation call
-            print(colored("Compliment:", "green"), f"{prompt.generate(**kwargs)}\n")
-
-            try_again = input(colored("Generate another (y/n)? ", "green")).lower().strip() == "y"
-            print()
-
-        print("Ready to share with your friends (and the world)?\n")
-        print(" 1. Run: echo steamship >> requirements.txt")
-        print(" 2. Run: echo termcolor >> requirements.txt")
-        print(" 3. Run: ship deploy")
-        print("\n.. to get a production-ready API and a web-based demo app.\n")

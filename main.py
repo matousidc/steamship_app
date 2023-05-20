@@ -16,6 +16,7 @@ st.title("Your personal Ericsson motivator to get you through loads")
 
 
 def generate():
+    """Request for generate endpoint"""
     name = "bob"
     trait = "autistic"
     # Invoke the method
@@ -23,21 +24,25 @@ def generate():
     print(resp)
 
 
-def generate_motivation(prompt):
+
+
+
+def generate_motivation(prompt: str):
+    """Request for generate_ericsson endpoint"""
     resp2 = pkg.invoke("generate_ericsson", _prompt=prompt)
     print(resp2)
-    st.write(str(resp2))
-    # st.markdown(str(resp2))
-    # st.text_area(label='Response', value=resp2, height=150, label_visibility='collapsed')
+    st.write(str(resp2))  # works better if specified as str
 
 
 # api_key="AB14DB2B-15A2-44B2-BB20-A351F8B7B1B5"
 # Load the package instance stub.
-pkg = Steamship.use("ericsson_motivator", instance_handle="ericsson_motivator-6if")
+pkg = Steamship.use("ericsson_motivator", instance_handle="ericsson_motivator-6fb")
 
+# defining streamlit
+st.title("Your personal Ericsson motivator to get you through loads")
 st.markdown("### What is bothering you today?")
-text = st.text_input("# What is bothering you today?", label_visibility='collapsed')
+text = st.text_input("# What is bothering you today?", label_visibility="collapsed")
 st.markdown("### Response")
 if text:
-    generate_motivation(text)
-
+    with st.spinner("LLM is thinking..."):
+        generate_motivation(text)

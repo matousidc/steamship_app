@@ -1,2 +1,6 @@
 .venv/
 .idea/
+__pycache__/
+github_time.py
+github_continuous.py
+repos.txt
